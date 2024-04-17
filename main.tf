@@ -7,7 +7,7 @@ variable "GOOGLE_CREDENTIALS" {
 # Configure the Google Cloud Provider
 provider "google" {
   credentials = var.GOOGLE_CREDENTIALS
-  project     = "<YOUR-PROJECT-ID>"
+  project     = "terraform-cloud-420613"
   region      = "us-central1"
   zone        = "us-central1-c"
 }
