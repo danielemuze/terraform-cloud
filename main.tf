@@ -1,31 +1,30 @@
-# Declare the variable for Google Cloud credentials
 variable "GOOGLE_CREDENTIALS" {
   description = "JSON key for GCP service account"
   type        = string
+  sensitive   = true
 }
 
-# Configure the Google Cloud Provider
 provider "google" {
   credentials = var.GOOGLE_CREDENTIALS
   project     = "terraform-cloud-420613"
-  region      = "us-central1"
-  zone        = "us-central1-c"
+  region      = "us-west1"
+  zone        = "us-west1-a"
 }
 
-# Create a Google Compute Engine instance using the custom machine image
+
 resource "google_compute_instance" "vm_instance" {
   name         = "terraform-test-instance"
-  machine_type = "e2-highcpu-4" # Update the machine type to match your template
+  machine_type = "e2-highcpu-4"
 
   boot_disk {
-    # Reference the custom machine image using its self-link.
     initialize_params {
+      # Make sure the image selfLink is correct
       image = "projects/terraform-cloud-420613/global/machineImages/ubuntu-template"
     }
   }
 
   network_interface {
-    network = "default"
+    network = "default" # Use the default network for the project
     access_config {
       // Ephemeral IP for Internet access
     }
