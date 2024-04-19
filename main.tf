@@ -19,7 +19,7 @@ resource "google_compute_instance" "vm_instance" {
   boot_disk {
     initialize_params {
       # Make sure the image selfLink is correct
-      image = "projects/terraform-cloud-420613/global/machineImages/ubuntu-template"
+      image = "projects/terraform-cloud-420613/zones/us-west1-a/disks/ubuntu-template"
     }
   }
 
