@@ -11,12 +11,12 @@ provider "google" {
   zone        = "us-west1-a"
 }
 
-
 resource "google_compute_instance_from_machine_image" "tpl" {
   provider = google-beta
   project  = "terraform-cloud-420613"
-  name     = "test-vm"
+  name     = format("test-vm-%03d", count.index + 1)  // Name each VM uniquely using count.index
   zone     = "us-west1-a"
+  count    = 3  // Specify the number of VMs to create
 
   source_machine_image = "projects/terraform-cloud-420613/global/machineImages/ubuntu-template"
 
@@ -24,7 +24,7 @@ resource "google_compute_instance_from_machine_image" "tpl" {
   can_ip_forward = false
 }
 
-# Output the instance IP
-output "instance_ip" {
-  value = google_compute_instance_from_machine_image.tpl.network_interface[0].access_config[0].nat_ip
+# Output the private IPs of all instances
+output "instance_private_ips" {
+  value = [for vm in google_compute_instance_from_machine_image.tpl : vm.network_interface[0].network_ip]
 }
