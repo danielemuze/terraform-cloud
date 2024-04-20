@@ -12,26 +12,18 @@ provider "google" {
 }
 
 
-resource "google_compute_instance" "vm_instance" {
-  name         = "terraform-test-instance"
-  machine_type = "projects/terraform-cloud-420613/zones/us-west1-a/machineTypes/e2-highcpu-4"
+resource "google_compute_instance_from_machine_image" "tpl" {
+  provider = google-beta
+  name     = "test_vm"
+  zone     = "us-west1-a"
 
-  boot_disk {
-    initialize_params {
-      # Make sure the image selfLink is correct
-      image = "projects/terraform-cloud-420613/global/machineImages/ubuntu-template"
-    }
-  }
+  source_machine_image = "projects/terraform-cloud-420613/global/machineImages/ubuntu-template"
 
-  network_interface {
-    network = "default" # Use the default network for the project
-    access_config {
-      // Ephemeral IP for Internet access
-    }
-  }
+  // Override fields from machine image
+  can_ip_forward = false
 }
 
 # Output the instance IP
 output "instance_ip" {
-  value = google_compute_instance.vm_instance.network_interface[0].access_config[0].nat_ip
+  value = google_compute_instance_from_machine_image.tpl.network_interface[0].access_config[0].nat_ip
 }
