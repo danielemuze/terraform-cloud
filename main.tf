@@ -15,7 +15,7 @@ provider "google" {
 resource "google_compute_instance_from_machine_image" "tpl" {
   provider = google-beta
   project  = "terraform-cloud-420613"
-  name     = "test_vm"
+  name     = "test-vm"
   zone     = "us-west1-a"
 
   source_machine_image = "projects/terraform-cloud-420613/global/machineImages/ubuntu-template"
