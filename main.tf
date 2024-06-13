@@ -14,13 +14,13 @@ provider "google" {
 resource "google_compute_instance_from_machine_image" "tpl" {
   provider = google-beta
   project  = "terraform-cloud-420613"
-  name     = format("test-vm-%03d", count.index + 1)  // Name each VM uniquely using count.index
+  count    = 3  # Specify the number of VMs to create
+  name     = element(["master", "worker1", "worker2"], count.index)
   zone     = "us-west1-a"
-  count    = 3  // Specify the number of VMs to create
 
   source_machine_image = "projects/terraform-cloud-420613/global/machineImages/ubuntu-template"
 
-  // Override fields from machine image
+  # Override fields from machine image
   can_ip_forward = false
 }
 
