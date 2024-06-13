@@ -24,7 +24,25 @@ resource "google_compute_instance_from_machine_image" "tpl" {
   can_ip_forward = false
 }
 
+resource "google_compute_instance_from_machine_image" "ansible" {
+  provider = google-beta
+  project  = "terraform-cloud-420613"
+  name     = "ansible"
+  zone     = "us-west1-a"
+
+  source_machine_image = "projects/terraform-cloud-420613/global/machineImages/ubuntu-template"
+
+  # Override fields from machine image
+  can_ip_forward = false
+}
+
 # Output the private IPs of all instances
 output "instance_private_ips" {
   value = [for vm in google_compute_instance_from_machine_image.tpl : vm.network_interface[0].network_ip]
 }
+
+# Output the private IP of the Ansible instance
+output "ansible_private_ip" {
+  value = google_compute_instance_from_machine_image.ansible.network_interface[0].network_ip
+}
+
